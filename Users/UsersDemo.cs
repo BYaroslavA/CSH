@@ -91,6 +91,53 @@ namespace SharpKnP321.Users
                     Console.WriteLine("Не відповідає формату");
                 }
             } while (!isEntryCorrect);
+            string validPassword = ReadAndValidatePassword();
+            Console.WriteLine("Пароль успішно прийнято!"); 
+            
+        }
+        
+        private string ReadAndValidatePassword()
+        {
+            while (true)
+            {
+                Console.WriteLine("Введіть пароль для реєстрації: ");
+                string password = Console.ReadLine() ?? "";
+
+                List<string> errors = new List<string>();
+
+                if (password.Length < 6)
+                {
+                    errors.Add("- довжина не менша 6 символів");
+                }
+                if (!password.Any(char.IsDigit))
+                {
+                    errors.Add("- містить щонайменше одну цифру");
+                }
+                if (!password.Any(c => !char.IsLetterOrDigit(c)))
+                {
+                    errors.Add("- містить щонайменше один спецсимвол (не літера, не цифра)");
+                }
+                if (!password.Any(char.IsLower))
+                {
+                    errors.Add("- містить щонайменше одну літеру нижнього реєстру (малу)");
+                }
+                if (!password.Any(char.IsUpper))
+                {
+                    errors.Add("- містить щонайменше одну літеру верхнього реєстру (велику)");
+                }
+
+                if (errors.Count == 0)
+                {
+                    return password; 
+                }
+
+                Console.WriteLine("\nПароль не відповідає вимогам безпеки. Порушені критерії:");
+                foreach (string error in errors)
+                {
+                    Console.WriteLine(error);
+                }
+                Console.WriteLine("Будь ласка, спробуйте ще раз.\n");
+            }
         }
     }
 }
